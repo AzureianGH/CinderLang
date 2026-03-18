@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendInterface", "Backend
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLVMBackend", "LLVMBackend\LLVMBackend.csproj", "{7D7CEC90-39E8-462F-9FD4-5C70BF487E5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCBBackend", "CCBBackend\CCBBackend.csproj", "{2E42D750-A46A-47D2-A7F4-370EC8B99CAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7D7CEC90-39E8-462F-9FD4-5C70BF487E5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D7CEC90-39E8-462F-9FD4-5C70BF487E5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D7CEC90-39E8-462F-9FD4-5C70BF487E5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E42D750-A46A-47D2-A7F4-370EC8B99CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E42D750-A46A-47D2-A7F4-370EC8B99CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E42D750-A46A-47D2-A7F4-370EC8B99CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E42D750-A46A-47D2-A7F4-370EC8B99CAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

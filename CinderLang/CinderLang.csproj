@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BackendInterface\BackendInterface.csproj" />
+    <ProjectReference Include="..\CCBBackend\CCBBackend.csproj" />
     <ProjectReference Include="..\LLVMBackend\LLVMBackend.csproj" />
   </ItemGroup>
 
