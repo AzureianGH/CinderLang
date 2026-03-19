@@ -1,4 +1,5 @@
 ﻿using System.Buffers.Text;
+using System.Reflection;
 using System.Text;
 using BackendInterface;
 using LLVMBackend;
@@ -11,6 +12,18 @@ namespace CinderLang
     {
         public static IBuilder Builder { get; set; }
 
-        static void Main(string[] args) => CLIManager.ManageCommands(args);
+        static void Main(string[] args)
+        {
+            if (!Directory.Exists("backends")) Directory.CreateDirectory("backends");
+
+            foreach (var item in Directory.GetDirectories("backends"))
+            {
+                var bdll = Path.Combine(item,"backend.dll");
+
+                if (File.Exists(bdll)) Assembly.LoadFrom(bdll);
+            }
+
+            CLIManager.ManageCommands(args);
+        }
     }
 }

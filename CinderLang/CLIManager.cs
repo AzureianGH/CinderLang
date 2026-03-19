@@ -34,6 +34,11 @@ namespace CinderLang
             var project = args[0];
 
             var BackendName = "llvm";
+
+            var ad = GetArgsDict(args.Skip(1).ToArray());
+
+            if (ad.ContainsKey("--backend")) BackendName = ad["--backend"];
+
             var BackendT = BackendManager.GetBackend(BackendName);
 
             Program.Builder = (IBuilder)Activator.CreateInstance(BackendT)!;
@@ -52,6 +57,15 @@ namespace CinderLang
                 var d = item.Module.PrintToString();
                 Console.WriteLine(d);
             }
+        }
+
+        static Dictionary<string,string> GetArgsDict(string[] args)
+        {
+            Dictionary<string, string> d = new();
+
+            for (int i = 0; i < args.Length; i += 2) d.Add(args[i], args[i+1]);
+
+            return d;
         }
 
         public static void PrintUsage()
