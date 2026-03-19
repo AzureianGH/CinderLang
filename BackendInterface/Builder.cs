@@ -13,6 +13,7 @@ namespace BackendInterface
         public IType DoubleType { get; }
         public IType VoidType { get; }
         public IType Int8Type { get; }
+        public IType Int1Type { get; }
 
         public void EmitToFile(string path,IModule module);
         public IValue BuildCall(IType Ty,IValue Fn, IValue[] Args, string name = "");

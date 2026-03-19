@@ -47,6 +47,7 @@ namespace LLVMBackend
         public IType VoidType => new LLVMType(context.VoidType);
 
         public IType Int8Type => new LLVMType(context.Int8Type);
+        public IType Int1Type => new LLVMType(context.Int1Type);
 
         public IValue BuildAlloca(IType t, string name = "") => 
             new LLVMValue(builder.BuildAlloca((t as LLVMType)!.type,name));

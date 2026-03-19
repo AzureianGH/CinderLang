@@ -8,6 +8,7 @@ using BackendInterface;
 using CinderLang.AstNodes;
 using LLVMSharp;
 using LLVMSharp.Interop;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CinderLang
 {
@@ -108,9 +109,25 @@ namespace CinderLang
                     int depth = 0;
                     StringBuilder current = new();
 
+                    bool isInString = false;
+                    StringType stringType = StringType.word;
+
                     foreach (char c in argstr)
                     {
-                        if (c == ',' && depth == 0)
+                        if (StringTypeExtensions.IsString(c))
+                        {
+                            if (!isInString)
+                            {
+                                isInString = true;
+                                stringType = StringTypeExtensions.GetStringType(c);
+                            }
+                            else if (stringType.GetString() == c)
+                            {
+                                if (!current.ToString().EndsWith('\\')) isInString = false;
+                            }
+                        }
+
+                        if (c == ',' && depth == 0 && !isInString)
                         {
                             var argType = InferTypeFromValue(current.ToString(), searchp);
                             args.Add(ParseValue(current.ToString(), argType, searchp, true));
@@ -229,9 +246,25 @@ namespace CinderLang
                     int depth = 0;
                     StringBuilder current = new();
 
+                    bool isInString = false;
+                    StringType stringType = StringType.word;
+
                     foreach (char c in argstr)
                     {
-                        if (c == ',' && depth == 0)
+                        if (StringTypeExtensions.IsString(c))
+                        {
+                            if (!isInString)
+                            {
+                                isInString = true;
+                                stringType = StringTypeExtensions.GetStringType(c);
+                            }
+                            else if (stringType.GetString() == c)
+                            {
+                                if (!current.ToString().EndsWith('\\')) isInString = false;
+                            }
+                        }
+
+                        if (c == ',' && depth == 0 && !isInString)
                         {
                             argTypes.Add(InferTypeFromValue(current.ToString(), scope));
                             current.Clear();
@@ -277,8 +310,8 @@ namespace CinderLang
             if (value.StartsWith("\"") && value.EndsWith("\""))
                 return Program.Builder.CreatePointer(Program.Builder.Int8Type);
 
-            //if (value == "true" || value == "false")
-            //    return Program.Builder.Int1Type;
+            if (value == "true" || value == "false")
+                return Program.Builder.Int1Type;
 
             return Program.Builder.VoidType;
         }
