@@ -32,7 +32,15 @@ namespace CinderLang
 
             var project = args[0];
 
-            var BackendName = "llvm";
+            var proj = ProjectManager.LoadProject(project);
+            var namespaces = new List<NameSpaceNode>();
+
+            foreach (var item in Directory.GetFiles(proj.SrcDir, "*.cin", proj.SearchOpt))
+                namespaces.AddRange(Parser.Parse(File.ReadAllText(item)));
+
+            if (!Directory.Exists(proj.OutDir)) Directory.CreateDirectory(proj.OutDir);
+
+            var BackendName = proj.Backend;
 
             var ad = GetArgsDict(args.Skip(1).ToArray());
 
@@ -41,14 +49,6 @@ namespace CinderLang
             var BackendT = BackendManager.GetBackend(BackendName);
 
             Program.Builder = (IBuilder)Activator.CreateInstance(BackendT)!;
-
-            var proj = ProjectManager.LoadProject(project);
-            var namespaces = new List<NameSpaceNode>();
-
-            foreach (var item in Directory.GetFiles(proj.SrcDir, "*.cin", proj.SearchOpt))
-                namespaces.AddRange(Parser.Parse(File.ReadAllText(item)));
-
-            if (!Directory.Exists(proj.OutDir)) Directory.CreateDirectory(proj.OutDir);
 
             foreach (var item in namespaces)
             {
