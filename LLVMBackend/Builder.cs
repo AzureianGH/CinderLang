@@ -103,6 +103,12 @@ namespace LLVMBackend
 
         public void PositionAtEnd(IBlock block) => 
             builder.PositionAtEnd((block as Block)!.block);
+        public void PositionAtHead(IBlock block)
+        {
+            var b = block as Block;
+
+            builder.Position(b!.block,b.block.FirstInstruction);
+        }
 
         public IValue BuildLoad(IType t, IValue v, string name = "") => 
             new LLVMValue(builder.BuildLoad2((t as LLVMType)!.type, (v as LLVMValue)!.Value, name));

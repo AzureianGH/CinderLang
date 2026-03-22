@@ -16,6 +16,15 @@ namespace Test
 		if (a==b)
 		{
 			printf("true");
+
+			if (a==b)
+			{
+				printf("Ddd");
+			}
+		}
+		else
+		{
+			printf("false");
 		}
 
 		return 0;

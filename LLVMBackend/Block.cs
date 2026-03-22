@@ -13,5 +13,10 @@ namespace LLVMBackend
         public Block(LLVMBasicBlockRef b) { block = b; }
 
         public LLVMBasicBlockRef block;
+
+        public override string ToString()
+        {
+            return block.ToString();
+        }
     }
 }

@@ -384,6 +384,8 @@ namespace CinderLang
             if (value == "true" || value == "false")
                 return Program.Builder.Int1Type;
 
+            ErrorManager.Throw(ErrorType.Syntax,$"Cannot retrive the type of \"{value}\"");
+
             return Program.Builder.VoidType;
         }
 

@@ -8,12 +8,13 @@ using BackendInterface;
 
 namespace CinderLang.AstNodes
 {
-    public class IfConditionNode : IAstContainerNode
+    public class IfConditionNode : IAstConditionNode
     {
         public string Name { get; set; }
         public IAstNode[] Children { get; set; }
         public IBlock Then { get; set; }
         public IBlock Else { get; set; }
+        public IBlock ContinueBlock { get; set; }
         public IAstContainerNode Parent { get; set; }
 
         public List<(IType,string,IValue)> ContextVariables { get; set; } = new();
@@ -23,15 +24,22 @@ namespace CinderLang.AstNodes
             if (parent is NameSpaceNode) ErrorManager.Throw(ErrorType.Syntax,"If statement cannot be nested inside a namepsace");
             else if (parent is IAstContainerNode container)
             {
+                Parent = container;
+
                 var statement = GenerationHelpers.ParseValue(Name,Program.Builder.Int1Type,container);
 
                 var iid = GenerateRandomString(16);
 
                 Then = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".True");
                 Else = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".False");
-                var Cblock = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".Then");
+                ContinueBlock = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".Then");
 
                 var br = Program.Builder.BuildCondBr(statement, Then, Else);
+
+                if (parent is IAstConditionNode cn) cn.ContinueBlock = ContinueBlock;
+                else MethodNode.CurrentMethod.Alignment = ContinueBlock;
+
+                Console.WriteLine(ContinueBlock.ToString());
 
                 foreach (var item in Children)
                 {
@@ -39,15 +47,13 @@ namespace CinderLang.AstNodes
                     item.Generate(this);
                 }
 
+                Console.WriteLine(ContinueBlock.ToString());
+
                 Program.Builder.PositionAtEnd(Then);
-                Program.Builder.BuildBr(Cblock);
+                Program.Builder.BuildBr(ContinueBlock);
 
                 Program.Builder.PositionAtEnd(Else);
-                Program.Builder.BuildBr(Cblock);
-
-                MethodNode.CurrentMethod.Alignment = Cblock;
-
-                Console.WriteLine("generated");
+                Program.Builder.BuildBr(ContinueBlock);
             }
             else ErrorManager.Throw(ErrorType.Syntax, "If statement must be nested.");
         }

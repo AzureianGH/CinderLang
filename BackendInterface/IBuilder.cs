@@ -20,6 +20,7 @@ namespace BackendInterface
         public IValue BuildStore(IValue val, IValue ptr);
         public IValue BuildAlloca(IType t, string name = "");
         public void PositionAtEnd(IBlock block);
+        public void PositionAtHead(IBlock block);
         public IValue BuildRet(IValue value);
         public IValue BuildVoidRet();
         public IModule CreateModuleWithName(string name);

@@ -127,6 +127,14 @@ namespace CinderLang
                         Children = null!,
                         Attributes = attribs
                     };
+                case "else":
+                    ReturnAttrError(keyword, attribs.Length);
+
+                    return new ElseConditionNode
+                    {
+                        Name = "",
+                        Children = Iterate(name.Trim()+';'),
+                    };
                 default:
                     if (GenerationHelpers.IsType(keyword))
                     {
@@ -171,6 +179,14 @@ namespace CinderLang
                     {
                         Name = name[1..^1],
                         Children = Iterate(buffer),
+                    };
+                case "else":
+                    ReturnAttrError(keyword, attribs.Length);
+
+                    return new ElseConditionNode
+                    {
+                        Name = "",
+                        Children = Iterate(name.Trim().Length > 0 ? name+" {"+buffer+'}' : buffer),
                     };
                 default:
                     ErrorManager.Throw(ErrorType.Syntax, $"Invalid keyword \"{keyword}\"");
