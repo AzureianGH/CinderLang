@@ -14,6 +14,8 @@ namespace CinderLang
 
         public static void ManageCommands(params string[] args)
         {
+            DrawCompilerHead.DrawHead();
+
             if (args.Length == 0) { PrintUsage(); return; }
 
             var cmd = args[0];

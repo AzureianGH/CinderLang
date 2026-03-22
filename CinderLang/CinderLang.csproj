@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="SixPix" Version="0.3.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,9 +27,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="assets\termlogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="tests\namespace.cin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="assets\" />
   </ItemGroup>
 
 	
