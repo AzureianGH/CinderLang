@@ -14,6 +14,18 @@ namespace LLVMBackend
 
         public LLVMBasicBlockRef block;
 
+        public void RemoveTerminator() => block.Terminator.InstructionEraseFromParent();
+        public void ClearBlock()
+        {
+            var instr = block.LastInstruction;
+            while (instr != null)
+            {
+                var prev = instr.PreviousInstruction;
+                instr.InstructionEraseFromParent();
+                instr = prev;
+            }
+        }
+
         public override string ToString()
         {
             return block.ToString();

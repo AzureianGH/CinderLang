@@ -56,13 +56,13 @@ namespace CinderLang
             {
                 item.Generate(null!);
 
+                var d = item.Module.PrintToString();
+                Console.WriteLine(d);
+
                 if (!item.Module.TryVerify(out var error))
                     ErrorManager.Throw(ErrorType.Generation, $"The namespace \"{item.Name}\" failed to generate, with the LLVM error: {error}");
 
                 Program.Builder.EmitToFile(Path.Combine(proj.OutDir, item.Name + ".o"), item.Module);
-
-                var d = item.Module.PrintToString();
-                Console.WriteLine(d);
             }
         }
 

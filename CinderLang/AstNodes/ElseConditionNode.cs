@@ -15,6 +15,8 @@ namespace CinderLang.AstNodes
         public IAstContainerNode Parent { get; set; }
         public IBlock ContinueBlock { get; set; }
 
+        public IfConditionNode ifcond;
+
         public List<(IType,string,IValue)> ContextVariables { get; set; } = new();
 
         public void Generate(IAstNode parent)
@@ -29,6 +31,9 @@ namespace CinderLang.AstNodes
                 if (tidx == 0 || (container.Children[tidx-1] is not IfConditionNode cmp)) ErrorManager.Throw(ErrorType.Syntax, "Else statement must be preceaded by an if.");
                 else
                 {
+                    cmp.Else.RemoveTerminator();
+
+                    ifcond = cmp;
                     ContinueBlock = cmp.Else;
 
                     foreach (var item in Children)
@@ -36,6 +41,9 @@ namespace CinderLang.AstNodes
                         Program.Builder.PositionAtHead(cmp.Else);
                         item.Generate(this);
                     }
+
+                    Program.Builder.PositionAtEnd(ifcond.Else);
+                    Program.Builder.BuildBr(ifcond.ContinueBlock);
                 }
             }
             else ErrorManager.Throw(ErrorType.Syntax, "Else statement must be nested.");

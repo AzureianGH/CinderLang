@@ -32,14 +32,8 @@ namespace CinderLang.AstNodes
 
                 Then = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".True");
                 Else = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".False");
-                ContinueBlock = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".Then");
 
                 var br = Program.Builder.BuildCondBr(statement, Then, Else);
-
-                if (parent is IAstConditionNode cn) cn.ContinueBlock = ContinueBlock;
-                else MethodNode.CurrentMethod.Alignment = ContinueBlock;
-
-                Console.WriteLine(ContinueBlock.ToString());
 
                 foreach (var item in Children)
                 {
@@ -47,7 +41,11 @@ namespace CinderLang.AstNodes
                     item.Generate(this);
                 }
 
-                Console.WriteLine(ContinueBlock.ToString());
+                ContinueBlock = MethodNode.CurrentMethod.Function.AppendBasicBlock(iid + ".Then");
+
+                if (parent is not IAstConditionNode) MethodNode.CurrentMethod.Alignment = ContinueBlock;
+                else if (parent is IfConditionNode ic) ic.Then = ContinueBlock;
+                else if (parent is ElseConditionNode ec) ec.ifcond.Else = ContinueBlock;
 
                 Program.Builder.PositionAtEnd(Then);
                 Program.Builder.BuildBr(ContinueBlock);

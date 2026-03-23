@@ -11,21 +11,9 @@ namespace Test
 	def main() : int 
 	{
 		int a = 5;
-		int b = 5;
+		int b = 7;
 
-		if (a==b)
-		{
-			printf("true");
-
-			if (a==b)
-			{
-				printf("Ddd");
-			}
-		}
-		else
-		{
-			printf("false");
-		}
+		if (a==a) printf("hi");
 
 		return 0;
 	}

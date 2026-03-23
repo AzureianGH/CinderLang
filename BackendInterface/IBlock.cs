@@ -8,5 +8,7 @@ namespace BackendInterface
 {
     public interface IBlock
     {
+        public void RemoveTerminator();
+        public void ClearBlock();
     }
 }

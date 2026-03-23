@@ -127,6 +127,36 @@ namespace CinderLang
                         Children = null!,
                         Attributes = attribs
                     };
+                case "if":
+                    ReturnAttrError(keyword, attribs.Length);
+
+                    if (!name.StartsWith('(')) ErrorManager.Throw(ErrorType.Syntax, "If condition must be inside parenthesis");
+
+                    int pdepth = 0;
+                    int send = 0;
+
+                    for (int i = 0; i < name.Length; i++)
+                    {
+                        if (name[i] == '(') pdepth++;
+                        else if (name[i] == ')')
+                        {
+                            pdepth--;
+
+                            if (pdepth == 0)
+                            {
+                                send = i;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (pdepth > 0) ErrorManager.Throw(ErrorType.Syntax, "All parenthesis must be closed");
+
+                    return new IfConditionNode
+                    {
+                        Name = name.Substring(1,send-1).Trim(),
+                        Children = Iterate(name[(send+1)..] +';'),
+                    };
                 case "else":
                     ReturnAttrError(keyword, attribs.Length);
 
