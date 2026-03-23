@@ -52,18 +52,38 @@ namespace CinderLang
 
             Program.Builder = (IBuilder)Activator.CreateInstance(BackendT)!;
 
+            var count = namespaces.Count;
+            var compleated = 0;
+
+            Console.WriteLine("\n\n\n\n\n\n");
+            Console.CursorTop -= 7;
+
+            Console.CursorVisible = false;
+
             foreach (var item in namespaces)
             {
                 item.Generate(null!);
-
-                var d = item.Module.PrintToString();
-                Console.WriteLine(d);
 
                 if (!item.Module.TryVerify(out var error))
                     ErrorManager.Throw(ErrorType.Generation, $"The namespace \"{item.Name}\" failed to generate, with the LLVM error: {error}");
 
                 Program.Builder.EmitToFile(Path.Combine(proj.OutDir, item.Name + ".o"), item.Module);
+
+                compleated++;
+
+                ProgressBarManager.DrawBar(compleated, count);
+                ProgressBarManager.SendMessage($"Compiled \"{item.Name}\" --> \"{item.Name}.o\"");
             }
+
+            Console.CursorVisible = true;
+
+            Console.CursorTop += 7;
+
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Compiled {namespaces.Count} namespaces");
+            Console.ResetColor();
         }
 
         static Dictionary<string,string> GetArgsDict(string[] args)

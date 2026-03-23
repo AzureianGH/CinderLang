@@ -53,7 +53,7 @@ namespace CinderLang
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = ConsoleColor.Blue;
 
                 Console.WriteLine("    ██████████");
                 Console.WriteLine("  ██████");

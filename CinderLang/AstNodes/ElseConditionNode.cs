@@ -28,8 +28,6 @@ namespace CinderLang.AstNodes
 
                 var tidx = Array.IndexOf(container.Children,this);
 
-                Console.WriteLine(container.Children[tidx - 1]);
-
                 void th() => ErrorManager.Throw(ErrorType.Syntax, "Else statement must be preceded by an if.");
 
                 IfConditionNode cmp = null!;
