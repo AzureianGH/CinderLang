@@ -10,11 +10,13 @@ namespace CinderLang
 {
     public static class CLIManager
     {
-        // everything in here is tmp
+        static bool NoGraphics = false;
 
         public static void ManageCommands(params string[] args)
         {
-            DrawCompilerHead.DrawHead();
+            NoGraphics = args.Contains("--no-graphics");
+
+            if (!NoGraphics) DrawCompilerHead.DrawHead();
 
             if (args.Length == 0) { PrintUsage(); return; }
 
@@ -55,14 +57,18 @@ namespace CinderLang
             var count = namespaces.Count;
             var compleated = 0;
 
-            Console.WriteLine("\n\n\n\n\n\n\n");
-            Console.CursorTop -= 7;
+            if (!NoGraphics) 
+            {
+                Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
+                Console.CursorTop -= 11;
+            }
 
             Console.CursorVisible = false;
 
             foreach (var item in namespaces)
             {
-                Console.CursorTop += 8;
+                if (!NoGraphics)
+                    Console.CursorTop += 8;
 
                 item.Generate(null!);
 
@@ -74,17 +80,22 @@ namespace CinderLang
 
                 Program.Builder.EmitToFile(Path.Combine(proj.OutDir, item.Name + ".o"), item.Module);
 
-                Console.CursorTop -= 8;
+                if (!NoGraphics)
+                    Console.CursorTop -= 8;
 
                 compleated++;
 
-                ProgressBarManager.DrawBar(compleated, count);
-                ProgressBarManager.SendMessage($"Compiled \"{item.Name}\" --> \"{item.Name}.o\"");
+                if (!NoGraphics)
+                {
+                    ProgressBarManager.DrawBar(compleated, count);
+                    ProgressBarManager.SendMessage($"Compiled \"{item.Name}\" --> \"{item.Name}.o\"");
+                }
             }
 
             Console.CursorVisible = true;
 
-            Console.CursorTop += 8;
+            if (!NoGraphics)
+                Console.CursorTop += 8;
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Compiled {namespaces.Count} namespaces");
@@ -95,7 +106,13 @@ namespace CinderLang
         {
             Dictionary<string, string> d = new();
 
-            for (int i = 0; i < args.Length; i += 2) d.Add(args[i], args[i+1]);
+            for (int i = 0; i < args.Length; i += 2)
+            {
+                if (args[i].StartsWith("--"))
+                    d.Add(
+                        args[i],
+                        (i + 1 < args.Length && !args[i + 1].StartsWith("--")) ? args[i + 1] : "");
+            }
 
             return d;
         }
