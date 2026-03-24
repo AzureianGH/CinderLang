@@ -1,0 +1,11 @@
+namespace Test.Functions
+{
+	variadic extern def printf(byte* data) : int;
+
+	def Test() {}
+
+	def Test2(int a,float b) : int 
+	{
+		return 0;
+	}
+}

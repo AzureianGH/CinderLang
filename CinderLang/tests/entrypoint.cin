@@ -1,0 +1,11 @@
+namespace Test.EntryPoint
+{
+	variadic extern def printf(byte* data) : int;
+
+	def main() : int
+	{
+		printf("Hello world");
+
+		return 0;
+	}
+}

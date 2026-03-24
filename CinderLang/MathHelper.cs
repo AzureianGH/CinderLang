@@ -120,14 +120,14 @@ namespace CinderLang
             {
                 if (!IsOperator(token))
                 {
-                    stack.Push(GenerationHelpers.ParseValue(token, type, node));
+                    stack.Push(GenerationHelpers.ParseValue(token, type, node,true,true));
                     continue;
                 }
 
                 var right = stack.Pop();
                 var left = stack.Pop();
 
-                stack.Push(EmitOp(token, left, right, type));
+                stack.Push(EmitOp(token,left,right,type));
             }
 
             return stack.Pop();

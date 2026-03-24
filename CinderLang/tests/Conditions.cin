@@ -1,0 +1,12 @@
+namespace Test.Conditions
+{
+	variadic extern def printf(byte* data) : int;
+
+	def Test() 
+	{
+		bool a = true;
+
+		if (a == a) printf("True");
+		else printf("False");
+	}
+}

@@ -1,0 +1,11 @@
+namespace Test.Variables
+{
+	def Test() 
+	{
+		int a;
+		int b = 0;
+		
+		a = b;
+		b = a + b;
+	}
+}
